@@ -14,8 +14,10 @@ jobs:
           root-reserve-mb: 512
           swap-size-mb: 1024
           remove-dotnet: 'true'
-          remove-android: 'true'
+          remove-android: 'true'  # Bunu 'true' yaparsan Android SDK'yı siler, yer açılır!
           remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true' # Docker imajlarını silmek tonla yer açar
 
       - name: Checkout code
         uses: actions/checkout@v4
