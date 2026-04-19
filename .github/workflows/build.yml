@@ -39,15 +39,12 @@ jobs:
           libncurses5-dev libncursesw5-dev libssl-dev libreadline-dev \
           libtinfo5 libtinfo-dev squashfs-tools repo
 
-      - name: Initialize repo
+      - name: Initialize Source
         run: |
-          mkdir -p ~/android
-          cd ~/android
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-          # Branch ismini pie-x86 olarak güncelledik
-          repo init -u https://github.com/android-x86/manifest.git -b pie-x86
-          repo sync -j4 --force-sync
+          mkdir android_build
+          cd android_build
+          repo init -u https://github.com/LineageOS/android.git -b lineage-16.0
+          repo sync -j$(nproc) --force-sync
 
       - name: Build
         run: |
