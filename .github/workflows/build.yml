@@ -45,8 +45,8 @@ jobs:
           cd ~/android
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
-          # Resmi android-x86 github reposu üzerinden x86_64 branch'i
-          repo init -u https://github.com/android-x86/manifest.git -b android-x86-9.0-r2
+          # Branch ismini pie-x86 olarak güncelledik
+          repo init -u https://github.com/android-x86/manifest.git -b pie-x86
           repo sync -j4 --force-sync
 
       - name: Build
