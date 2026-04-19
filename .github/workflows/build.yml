@@ -18,7 +18,7 @@ jobs:
           remove-haskell: 'true'
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -46,7 +46,7 @@ jobs:
           m -j$(nproc) iso_img
 
       - name: Upload ISO
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Android-x86-Custom-ISO
           path: ~/android/out/target/product/x86_64/*.iso
