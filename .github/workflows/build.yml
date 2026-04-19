@@ -1,0 +1,51 @@
+name: Build Custom Android-x86
+
+on:
+  workflow_dispatch: # Bu, sadece sen "Run" tuşuna bastığında çalışmasını sağlar.
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git-core gnupg flex bison gperf build-essential zip curl \
+          zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev \
+          x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev libxml2-utils \
+          xsltproc unzip bc python3-pip python3-setuptools python3-mako \
+          libncurses5-dev libncursesw5-dev libssl-dev libreadline-dev \
+          libtinfo5 libtinfo-dev squashfs-tools repo
+
+      - name: Initialize repo
+        run: |
+          mkdir -p ~/android
+          cd ~/android
+          repo init -u git://git.osdn.net/gitroot/android-x86/manifest -b android-x86-11-r6
+          repo sync -j8
+
+      - name: Build
+        run: |
+          cd ~/android
+          # Buraya kendi kernel/mesa dosyalarını kopyaladığın komutları ekleyebilirsin
+          source build/envsetup.sh
+          lunch android_x86_64-userdebug
+          m -j$(nproc) iso_img
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v3
+        with:
+          name: Android-x86-Custom-ISO
+          path: ~/android/out/target/product/x86_64/*.iso
