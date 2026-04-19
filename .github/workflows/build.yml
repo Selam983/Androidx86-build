@@ -1,7 +1,7 @@
 name: Build Android 9 (LineageOS 16.0)
 
 on:
-  workflow_dispatch: # Manuel tetikleme için
+  workflow_dispatch:
 
 jobs:
   build:
@@ -13,25 +13,25 @@ jobs:
       - name: Setup Build Environment
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
-
-      - name: Setup Repo
-        run: |
-          mkdir ~/bin
-          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-          chmod a+x ~/bin/repo
-          export PATH=~/bin:$PATH
+          sudo apt install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev python3-pip
+          # Repo aracını sistem dizinine kuruyoruz ki PATH sorunu olmasın
+          sudo curl https://storage.googleapis.com/git-repo-downloads/repo -o /usr/local/bin/repo
+          sudo chmod a+x /usr/local/bin/repo
 
       - name: Initialize Source
         run: |
           mkdir android_build
           cd android_build
+          # Kullanıcı bilgilerini yapılandır (Git'in hata vermemesi için şart)
+          git config --global user.email "yusuf@example.com"
+          git config --global user.name "Yusuf"
           repo init -u https://github.com/LineageOS/android.git -b lineage-16.0
-          repo sync -j$(nproc) --force-sync
+          repo sync -j$(nproc) --force-sync --no-clone-bundle
 
       - name: Build
         run: |
           cd android_build
           source build/envsetup.sh
-          breakfast lineage_x86-userdebug
+          # brunch lineage_x86-userdebug yerine spesifik komut
+          lunch lineage_x86-userdebug
           mka bacon
