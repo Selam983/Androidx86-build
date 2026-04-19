@@ -34,8 +34,10 @@ jobs:
         run: |
           mkdir -p ~/android
           cd ~/android
-          repo init -u git://git.osdn.net/gitroot/android-x86/manifest -b android-x86-11-r6
-          repo sync -j8
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          repo init -u https://git.osdn.net/gitroot/android-x86/manifest -b android-x86-9.0-r2
+          repo sync -j4 --force-sync
 
       - name: Build
         run: |
