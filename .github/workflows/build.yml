@@ -38,7 +38,8 @@ jobs:
           cd ~/android
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
-          repo init -u https://git.osdn.net/gitroot/android-x86/manifest -b android-x86-9.0-r2
+          # Google AOSP kaynakları
+          repo init -u https://android.googlesource.com/platform/manifest -b android-9.0.0_r60
           repo sync -j4 --force-sync
 
       - name: Build
