@@ -25,10 +25,23 @@ jobs:
         run: |
           mkdir android_build
           cd android_build
-          # Kullanıcı bilgilerini yapılandır (Git'in hata vermemesi için şart)
           git config --global user.email "yusuf@example.com"
           git config --global user.name "Yusuf"
+          
+          # 1. Ana LineageOS manifestini başlat
           repo init -u https://github.com/LineageOS/android.git -b lineage-16.0
+          
+          # 2. Android-x86 cihaz ağacını eklemek için local_manifest kullanacağız
+          mkdir -p .repo/local_manifests
+          cat <<EOF > .repo/local_manifests/x86.xml
+          <?xml version="1.0" encoding="UTF-8"?>
+          <manifest>
+            <project name="android-x86/device-generic-common" path="device/generic/common" remote="github" revision="pie-x86" />
+            <project name="android-x86/device-generic-x86" path="device/generic/x86" remote="github" revision="pie-x86" />
+          </manifest>
+          EOF
+          
+          # 3. Şimdi sync yap
           repo sync -j$(nproc) --force-sync --no-clone-bundle
 
       - name: Build
